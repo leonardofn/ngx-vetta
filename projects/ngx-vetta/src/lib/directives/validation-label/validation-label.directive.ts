@@ -3,11 +3,18 @@ import {
   ElementRef,
   HostListener,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Renderer2,
+  SimpleChanges,
 } from '@angular/core';
-import { NgControl, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  NgControl,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -19,32 +26,31 @@ enum CssClass {
   INVALID_FEEDBACK = 'invalid-feedback',
 }
 
-@Directive({ selector: '[validationLabel]' })
-export class ValidationLabelDirective implements OnInit, OnDestroy {
-  @Input('formControlName') formControlName: string;
-  private unsub$ = new Subject<void>();
+@Directive({
+  selector: 'input[vetValidationLabel], textarea[vetValidationLabel]',
+})
+export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
+  private unsub$: Subject<void> = new Subject<void>();
   private divElement: HTMLDivElement | null = null;
-  private labelElementId = '';
+  private labelElementId: string = '';
+
+  @Input('formControlName') formControlName: string = '';
+  @Input('noWhiteSpace') noWhiteSpace: boolean = true;
 
   constructor(
     private renderer2: Renderer2,
-    private elRef: ElementRef<HTMLElement>,
-    private control: NgControl
+    private elRef: ElementRef,
+    private ngControl: NgControl
   ) {}
 
   ngOnInit(): void {
-    this.labelElementId = Boolean(this.formControlName)
-      ? this.formControlName + '-error'
-      : 'control-' + this.generateID();
-    this.control.statusChanges
-      .pipe(takeUntil(this.unsub$))
-      .subscribe((status) => {
-        if (status === 'INVALID' && this.control.touched) {
-          this.showError();
-        } else {
-          this.removeError();
-        }
-      });
+    this.setElementId();
+    this.onStatusChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const { currentValue } = changes.noWhiteSpace || {};
+    this.handleWhiteSpaceValidator(currentValue);
   }
 
   ngOnDestroy(): void {
@@ -56,11 +62,38 @@ export class ValidationLabelDirective implements OnInit, OnDestroy {
   @HostListener('blur', ['$event']) onBlurEvent() {
     // Isto é necessário para lidar com o caso de clicar num campo necessário e sair.
     // Os restantes são tratados por assinatura de mudança de estado se (this.control.value === null || this.control.value === '') { }
-    if (this.control.errors) {
+    if (this.ngControl.errors) {
       this.showError();
     } else {
       this.removeError();
     }
+  }
+
+  private onStatusChanges() {
+    this.ngControl.statusChanges
+      .pipe(takeUntil(this.unsub$))
+      .subscribe((status) => {
+        if (status === 'INVALID' && this.ngControl.touched) {
+          this.showError();
+        } else {
+          this.removeError();
+        }
+      });
+  }
+
+  private handleWhiteSpaceValidator(noWhiteSpace: any) {
+    let defaultErrors: ValidatorFn | null = null;
+    if (noWhiteSpace && typeof noWhiteSpace === 'boolean') {
+      this.ngControl.control.setValidators([
+        this.ngControl.control.validator,
+        this.noWhiteSpaceValidator,
+      ]);
+    } else {
+      defaultErrors = this.ngControl.control.validator;
+      this.ngControl.control.clearValidators();
+      this.ngControl.control.setValidators(defaultErrors);
+    }
+    this.ngControl.control.updateValueAndValidity();
   }
 
   private showError() {
@@ -78,10 +111,7 @@ export class ValidationLabelDirective implements OnInit, OnDestroy {
   private removeError() {
     if (this.divElement) {
       this.renderer2.removeClass(this.elRef.nativeElement, CssClass.REQUIRED);
-      this.renderer2.removeClass(
-        this.elRef.nativeElement,
-        CssClass.IS_INVALID
-      );
+      this.renderer2.removeClass(this.elRef.nativeElement, CssClass.IS_INVALID);
       this.renderer2.removeChild(
         this.elRef.nativeElement.parentElement,
         this.divElement
@@ -103,18 +133,31 @@ export class ValidationLabelDirective implements OnInit, OnDestroy {
     const messages = {
       required: (e: ValidationErrors) => 'Campo obrigatório.',
       invalid: (e: ValidationErrors) => 'Campo inválido.',
+      whitespace: (e: ValidationErrors) => 'Campo inválido.',
       minlength: (e: ValidationErrors) =>
         `Deve ter no mínimo ${e.requiredLength} caracteres.`,
       maxlength: (e: ValidationErrors) =>
         `Deve ter no máximo ${e.requiredLength} caracteres.`,
     };
-    const valErrors: ValidationErrors = this.control.errors;
+    const valErrors: ValidationErrors = this.ngControl.errors;
     const firstErrorKey = Object.keys(valErrors)[0];
     return messages[firstErrorKey](valErrors[firstErrorKey]);
+  };
+
+  private setElementId = () => {
+    this.labelElementId = Boolean(this.formControlName)
+      ? this.formControlName + '-error'
+      : 'control-' + this.generateID();
   };
 
   private generateID = (): string =>
     Math.floor(Math.random() * Math.floor(Math.random() * Date.now())).toString(
       16
     );
+
+  private get noWhiteSpaceValidator(): ValidatorFn {
+    return (control: AbstractControl) => {
+      return (control.value || '').trim().length ? null : { whitespace: true };
+    };
+  }
 }
