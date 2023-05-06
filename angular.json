@@ -3,5 +3,46 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "ngx-vetta": {
+      "projectType": "library",
+      "root": "projects/ngx-vetta",
+      "sourceRoot": "projects/ngx-vetta/src",
+      "prefix": "vet",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/ngx-vetta/tsconfig.lib.json",
+            "project": "projects/ngx-vetta/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-vetta/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-vetta/src/test.ts",
+            "tsConfig": "projects/ngx-vetta/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-vetta/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-vetta/tsconfig.lib.json",
+              "projects/ngx-vetta/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ngx-vetta"
 }

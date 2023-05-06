@@ -10,6 +10,12 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "paths": {
+      "ngx-vetta": [
+        "dist/ngx-vetta/ngx-vetta",
+        "dist/ngx-vetta"
+      ]
+    },
     "target": "es2015",
     "module": "es2020",
     "lib": [
