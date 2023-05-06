@@ -2,9 +2,8 @@
   "name": "ngx-vetta-workspace",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "build:dev": "ng build ngx-vetta",
+    "build:pack": "ng build --configuration production ngx-vetta && cd dist/ngx-vetta && npm pack",
     "test": "ng test",
     "lint": "ng lint"
   },
