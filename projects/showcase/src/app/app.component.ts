@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'showcase';
+  form: FormGroup;
+  constructor() {}
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      test: new FormControl('', [Validators.required]),
+    });
+  }
 }
