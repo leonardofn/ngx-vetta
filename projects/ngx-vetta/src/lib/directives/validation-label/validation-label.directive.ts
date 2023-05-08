@@ -12,14 +12,8 @@ import {
 import { NgControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CssClass } from '../../core/enums/css-class.enum';
 import ValidatorsUtils from '../../shared/utils/validators.utils';
-
-// Bootstap CSS classes
-enum CssClass {
-  REQUIRED = 'required',
-  IS_INVALID = 'is-invalid',
-  INVALID_FEEDBACK = 'invalid-feedback',
-}
 
 @Directive({
   selector: 'input[vetValidationLabel], textarea[vetValidationLabel]',
@@ -125,14 +119,12 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
   };
 
   private getMessageValidation = (): string => {
-    const messages = {
-      required: (e: ValidationErrors) => 'Campo obrigatório.',
-      invalid: (e: ValidationErrors) => 'Campo inválido.',
-      whitespace: (e: ValidationErrors) => 'Campo inválido.',
-      minlength: (e: ValidationErrors) =>
-        `Deve ter no mínimo ${e.requiredLength} caracteres.`,
-      maxlength: (e: ValidationErrors) =>
-        `Deve ter no máximo ${e.requiredLength} caracteres.`,
+    const messages: { [key: string]: (e: ValidationErrors) => string } = {
+      required: () => 'Campo obrigatório.',
+      invalid: () => 'Campo inválido.',
+      whitespace: () => 'Campo inválido.',
+      minlength: (e) => `Deve ter no mínimo ${e.requiredLength} caracteres.`,
+      maxlength: (e) => `Deve ter no máximo ${e.requiredLength} caracteres.`,
     };
     const valErrors: ValidationErrors = this.ngControl.errors;
     const firstErrorKey = Object.keys(valErrors)[0];
