@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { TestHelpers } from '../../shared/utils/test-helpers';
+import TestUtils from '../../shared/utils/test.utils';
 import { ValidationLabelDirective } from './validation-label.directive';
 
 @Component({
@@ -62,7 +62,7 @@ describe('ValidationLabelDirective', () => {
     fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
     component = fixture.componentInstance;
-    input = TestHelpers.findEl(fixture, 'input').nativeElement;
+    input = TestUtils.findEl(fixture, 'input').nativeElement;
   });
 
   it('should create an instance', () => {
@@ -70,14 +70,14 @@ describe('ValidationLabelDirective', () => {
   });
 
   it('should show error when input is touched and invalid', () => {
-    TestHelpers.setFieldElementValue(input, '');
+    TestUtils.setFieldElementValue(input, '');
 
-    TestHelpers.blur(fixture, 'input');
+    TestUtils.blur(fixture, 'input');
     fixture.detectChanges();
 
     expect(input.classList).toContain('is-invalid');
 
-    const elements = TestHelpers.queryAllByCss(
+    const elements = TestUtils.queryAllByCss(
       fixture,
       '.invalid-feedback'
     ).map<HTMLDivElement>((el) => el.nativeElement);
@@ -86,14 +86,14 @@ describe('ValidationLabelDirective', () => {
   });
 
   it('should remove error when input is valid', () => {
-    TestHelpers.setFieldElementValue(input, 'test');
+    TestUtils.setFieldElementValue(input, 'test');
 
-    TestHelpers.blur(fixture, 'input');
+    TestUtils.blur(fixture, 'input');
     fixture.detectChanges();
 
     expect(input.classList).not.toContain('is-invalid');
 
-    const elements = TestHelpers.queryAllByCss(
+    const elements = TestUtils.queryAllByCss(
       fixture,
       '.invalid-feedback'
     ).map<HTMLDivElement>((el) => el.nativeElement);

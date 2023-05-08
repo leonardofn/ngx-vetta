@@ -9,17 +9,12 @@ import {
   Renderer2,
   SimpleChanges,
 } from '@angular/core';
-import {
-  AbstractControl,
-  NgControl,
-  ValidationErrors,
-  ValidatorFn,
-} from '@angular/forms';
+import { NgControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import ValidatorsUtils from '../../shared/utils/validators.utils';
 
 // Bootstap CSS classes
-
 enum CssClass {
   REQUIRED = 'required',
   IS_INVALID = 'is-invalid',
@@ -86,7 +81,7 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
     if (noWhiteSpace && typeof noWhiteSpace === 'boolean') {
       this.ngControl.control.setValidators([
         this.ngControl.control.validator,
-        this.noWhiteSpaceValidator,
+        ValidatorsUtils.noWhiteSpace,
       ]);
     } else {
       defaultErrors = this.ngControl.control.validator;
@@ -154,10 +149,4 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
     Math.floor(Math.random() * Math.floor(Math.random() * Date.now())).toString(
       16
     );
-
-  private get noWhiteSpaceValidator(): ValidatorFn {
-    return (control: AbstractControl) => {
-      return (control.value || '').trim().length ? null : { whitespace: true };
-    };
-  }
 }

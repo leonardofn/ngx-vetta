@@ -2,9 +2,9 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-export class TestHelpers {
+export default class TestUtils {
   /**
-   * Spec helpers for working with the DOM
+   * Spec utils for working with the DOM
    */
 
   /**
@@ -68,10 +68,7 @@ export class TestHelpers {
    *
    */
   static findEl<T>(fixture: ComponentFixture<T>, testId: string): DebugElement {
-    return TestHelpers.queryByCss<T>(
-      fixture,
-      TestHelpers.testIdSelector(testId)
-    );
+    return TestUtils.queryByCss<T>(fixture, TestUtils.testIdSelector(testId));
   }
 
   /**
@@ -85,7 +82,7 @@ export class TestHelpers {
     testId: string
   ): DebugElement[] {
     return fixture.debugElement.queryAll(
-      By.css(TestHelpers.testIdSelector(testId))
+      By.css(TestUtils.testIdSelector(testId))
     );
   }
 
@@ -96,7 +93,7 @@ export class TestHelpers {
    * @param testId Test id set by `data-testid`
    */
   static getText<T>(fixture: ComponentFixture<T>, testId: string): string {
-    return TestHelpers.findEl(fixture, testId).nativeElement.textContent;
+    return TestUtils.findEl(fixture, testId).nativeElement.textContent;
   }
 
   /**
@@ -112,7 +109,7 @@ export class TestHelpers {
     testId: string,
     text: string
   ): void {
-    expect(TestHelpers.getText(fixture, testId)).toBe(text);
+    expect(TestUtils.getText(fixture, testId)).toBe(text);
   }
 
   /**
@@ -173,7 +170,7 @@ export class TestHelpers {
     // Dispatch an `input` or `change` fake event
     // so Angular form bindings take notice of the change.
     const isSelect = element instanceof HTMLSelectElement;
-    TestHelpers.dispatchFakeEvent(
+    TestUtils.dispatchFakeEvent(
       element,
       isSelect ? 'change' : 'input',
       isSelect ? false : true
@@ -192,8 +189,8 @@ export class TestHelpers {
     testId: string,
     value: string
   ): void {
-    TestHelpers.setFieldElementValue(
-      TestHelpers.findEl(fixture, testId).nativeElement,
+    TestUtils.setFieldElementValue(
+      TestUtils.findEl(fixture, testId).nativeElement,
       value
     );
   }
@@ -211,10 +208,10 @@ export class TestHelpers {
     testId: string,
     checked: boolean
   ): void {
-    const { nativeElement } = TestHelpers.findEl(fixture, testId);
+    const { nativeElement } = TestUtils.findEl(fixture, testId);
     nativeElement.checked = checked;
     // Dispatch a `change` fake event so Angular form bindings take notice of the change.
-    TestHelpers.dispatchFakeEvent(nativeElement, 'change');
+    TestUtils.dispatchFakeEvent(nativeElement, 'change');
   }
 
   /**
@@ -245,8 +242,8 @@ export class TestHelpers {
    * @param testId Test id set by `data-testid`
    */
   static click<T>(fixture: ComponentFixture<T>, testId: string): void {
-    const element = TestHelpers.findEl(fixture, testId);
-    const event = TestHelpers.makeEvent('click', element.nativeElement);
+    const element = TestUtils.findEl(fixture, testId);
+    const event = TestUtils.makeEvent('click', element.nativeElement);
     element.triggerEventHandler('click', event);
   }
 
@@ -257,8 +254,8 @@ export class TestHelpers {
    * @param testId Test id set by `data-testid`
    */
   static blur<T>(fixture: ComponentFixture<T>, testId: string): void {
-    const element = TestHelpers.findEl(fixture, testId);
-    const event = TestHelpers.makeEvent('blur', element.nativeElement);
+    const element = TestUtils.findEl(fixture, testId);
+    const event = TestUtils.makeEvent('blur', element.nativeElement);
     element.triggerEventHandler('blur', event);
   }
 
@@ -275,7 +272,7 @@ export class TestHelpers {
     fixture: ComponentFixture<T>,
     selector: string
   ): DebugElement {
-    return TestHelpers.queryByCss(fixture, selector);
+    return TestUtils.queryByCss(fixture, selector);
   }
 
   /**
