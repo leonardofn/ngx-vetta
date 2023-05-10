@@ -9,19 +9,19 @@ import {
   Renderer2,
   SimpleChanges,
 } from '@angular/core';
-import { NgControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, NgControl, ValidationErrors } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CssClass } from '../../core/enums/css-class.enum';
 import ValidatorsUtils from '../../shared/utils/validators.utils';
 
 @Directive({
-  selector: 'input[vetValidationLabel], textarea[vetValidationLabel]',
+  selector:
+    'input[type=text][vetValidationLabel], textarea[vetValidationLabel]',
 })
 export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
   private unsub$: Subject<void> = new Subject<void>();
   private divElement: HTMLDivElement | null = null;
-  private labelElementId: string = '';
 
   @Input('formControlName') formControlName: string = '';
   @Input('noWhiteSpace') noWhiteSpace: boolean = true;
@@ -33,7 +33,6 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.setElementId();
     this.onStatusChanges();
   }
 
@@ -71,18 +70,17 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   private handleWhiteSpaceValidator(noWhiteSpace: any) {
-    let defaultErrors: ValidatorFn | null = null;
     if (noWhiteSpace && typeof noWhiteSpace === 'boolean') {
-      this.ngControl.control.setValidators([
-        this.ngControl.control.validator,
+      this.control.setValidators([
+        this.control.validator,
         ValidatorsUtils.noWhiteSpace,
       ]);
     } else {
-      defaultErrors = this.ngControl.control.validator;
-      this.ngControl.control.clearValidators();
-      this.ngControl.control.setValidators(defaultErrors);
+      const defaultErrors = this.control.validator;
+      this.control.clearValidators();
+      this.control.setValidators(defaultErrors);
     }
-    this.ngControl.control.updateValueAndValidity();
+    this.control.updateValueAndValidity();
   }
 
   private showError() {
@@ -112,7 +110,7 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
   private createDivElement = (errorMsg: string): HTMLDivElement => {
     const divLabel = this.renderer2.createText(errorMsg);
     const div = this.renderer2.createElement('div') as HTMLDivElement;
-    this.renderer2.setAttribute(div, 'id', this.labelElementId);
+    this.renderer2.setAttribute(div, 'id', this.elementId);
     this.renderer2.addClass(div, CssClass.INVALID_FEEDBACK);
     this.renderer2.appendChild(div, divLabel);
     return div;
@@ -131,14 +129,14 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
     return messages[firstErrorKey](valErrors[firstErrorKey]);
   };
 
-  private setElementId = () => {
-    this.labelElementId = Boolean(this.formControlName)
-      ? this.formControlName + '-error'
-      : 'control-' + this.generateID();
-  };
+  private get elementId(): string {
+    const idStr = Boolean(this.formControlName)
+      ? this.formControlName
+      : this.ngControl.name.toString();
+    return idStr.toString() + 'Invalid';
+  }
 
-  private generateID = (): string =>
-    Math.floor(Math.random() * Math.floor(Math.random() * Date.now())).toString(
-      16
-    );
+  private get control(): AbstractControl {
+    return this.ngControl.control;
+  }
 }
