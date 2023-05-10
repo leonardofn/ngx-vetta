@@ -164,7 +164,8 @@ export default class TestUtils {
    */
   static setFieldElementValue(
     element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
-    value: string
+    value: string,
+    isPaste = false
   ): void {
     element.value = value;
     // Dispatch an `input` or `change` fake event
@@ -172,7 +173,7 @@ export default class TestUtils {
     const isSelect = element instanceof HTMLSelectElement;
     TestUtils.dispatchFakeEvent(
       element,
-      isSelect ? 'change' : 'input',
+      isSelect ? 'change' : isPaste ? 'paste' : 'input',
       isSelect ? false : true
     );
   }
@@ -221,7 +222,10 @@ export default class TestUtils {
    *
    * @param target Element that is the target of the click event
    */
-  static makeEvent(type: string, target: EventTarget): Partial<MouseEvent> {
+  static makeClickEvent(
+    type: string,
+    target: EventTarget
+  ): Partial<MouseEvent> {
     return {
       preventDefault(): void {},
       stopPropagation(): void {},
@@ -236,6 +240,39 @@ export default class TestUtils {
   }
 
   /**
+   * It creates a fake focus loss event that provides the most important properties.
+   * The event can be passed to DebugElement#triggerEventHandler.
+   *
+   * @param target Element that is the target of the focus event
+   */
+  static makeBlurEvent(type: string, target: EventTarget): Partial<FocusEvent> {
+    return {
+      preventDefault(): void {},
+      stopPropagation(): void {},
+      stopImmediatePropagation(): void {},
+      type,
+      target,
+      currentTarget: target,
+      bubbles: true,
+      cancelable: true,
+    };
+  }
+
+  /**
+   * It creates a speech transfer area event that provides the most important properties.
+   * The event can be passed to DebugElement#triggerEventHandler.
+   *
+   * @param target Element that is the target of the clipboard event
+   */
+  static makeClipboardEvent(type: string): Partial<ClipboardEvent> {
+    return new ClipboardEvent(type, {
+      clipboardData: new DataTransfer(),
+      bubbles: true,
+      cancelable: true,
+    });
+  }
+
+  /**
    * Emulates a left click on the element with the given `data-testid` attribute.
    *
    * @param fixture Component fixture
@@ -243,7 +280,7 @@ export default class TestUtils {
    */
   static click<T>(fixture: ComponentFixture<T>, testId: string): void {
     const element = TestUtils.findEl(fixture, testId);
-    const event = TestUtils.makeEvent('click', element.nativeElement);
+    const event = TestUtils.makeClickEvent('click', element.nativeElement);
     element.triggerEventHandler('click', event);
   }
 
@@ -255,8 +292,42 @@ export default class TestUtils {
    */
   static blur<T>(fixture: ComponentFixture<T>, testId: string): void {
     const element = TestUtils.findEl(fixture, testId);
-    const event = TestUtils.makeEvent('blur', element.nativeElement);
+    const event = TestUtils.makeBlurEvent('blur', element.nativeElement);
     element.triggerEventHandler('blur', event);
+  }
+
+  /**
+   * Emulates a copy of the selection on the element with the `date-testid` attribute.
+   *
+   * @param fixture Component fixture
+   * @param testId Test id set by `data-testid`
+   */
+  static async copy<T>(
+    fixture: ComponentFixture<T>,
+    testId: string
+  ): Promise<void> {
+    const element = TestUtils.findEl(fixture, testId);
+    const event = TestUtils.makeClipboardEvent('copy');
+    await navigator.clipboard.writeText(element.nativeElement.textContent);
+    element.triggerEventHandler('copy', event);
+  }
+
+  /**
+   * Emulates a paste of characters on the element with the `date-testid` attribute.
+   *
+   * @param fixture Component fixture
+   * @param testId Test id set by `data-testid`
+   */
+  static async paste<T>(
+    fixture: ComponentFixture<T>,
+    testId: string
+  ): Promise<void> {
+    const element = TestUtils.findEl(fixture, testId);
+    const event = TestUtils.makeClipboardEvent('paste');
+    await navigator.clipboard.readText().then((clipText) => {
+      TestUtils.setFieldElementValue(element.nativeElement, clipText, true);
+      element.triggerEventHandler('paste', event);
+    });
   }
 
   /**
