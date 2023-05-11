@@ -1,69 +1,61 @@
-import {
-  Directive,
-  ElementRef,
-  HostListener,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { AbstractControl, NgControl } from '@angular/forms';
+import { DecimalNumberOptions } from '../../core/models/decimal-number.model';
 import { DecimalSeparator } from '../../core/types/decimal-separator.type';
 
 @Directive({
-  selector: 'input[type=text][vetNumberMask]',
+  selector: 'input[type=text][vetDecimalNumber]',
 })
-export class DecimalNumberMaskDirective implements OnChanges {
+export class DecimalNumberDirective {
   // ^([1-9]\\d*|0)?(\\,\\d{0,2})?$ -> inteiros ilimitados
   // ^([1-9]\\d{0,2}|0)?(\\,\\d{0,2})?$ -> inteiros limitados
   private decimalNumberStr = '^([1-9]\\d*|0)?(\\,\\d{0,2})?$';
   private decimalNumberRegex = new RegExp(this.decimalNumberStr);
   private onlyNumberRegex = /^\d+$/;
+
   private decimals = '00';
+  private decimalSeparator: DecimalSeparator = ',';
   private oldValue = '';
+  private enableMask: boolean;
 
   constructor(private elRef: ElementRef, private ngControl: NgControl) {}
 
-  @Input('maxIntegers') maxIntegers: number = 0;
-  @Input('allowNegative') allowNegative: boolean = false;
-  @Input('decimalSeparator') decimalSeparator: DecimalSeparator = ',';
+  @Input('decimalNumberOptions')
+  set decimalNumberOptions(options: DecimalNumberOptions) {
+    let {
+      maxIntegers = 0,
+      maxDecimals = 2,
+      decimalSeparator = ',',
+      allowNegative = false,
+      enableMask = false,
+    } = options || {};
 
-  @Input()
-  set vetNumberMask(value: string) {
-    this.handleDecimalInput(value);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.handleInputs(changes);
+    maxDecimals = maxDecimals > 0 ? maxDecimals : 2;
+    maxIntegers = maxIntegers > 0 ? maxIntegers : 0;
+    this.decimalSeparator = decimalSeparator;
+    const regexStart = allowNegative ? '^[-]?' : '^';
+    this.decimalNumberStr = `${regexStart}([1-9]\\d*|0)?(\\${this.decimalSeparator}\\d{0,${maxDecimals}})?$`;
+    this.enableMask = enableMask;
+    this.handleDecimalPart(maxDecimals.toString());
+    this.handleIntegerPart(maxIntegers);
   }
 
   @HostListener('blur', ['$event'])
-  onBlur(event: FocusEvent) {
+  onBlur() {
     this.setControlValue();
   }
 
   @HostListener('input', ['$event'])
-  onInput(event: InputEvent) {
+  onInput() {
     this.handleInputValue();
   }
 
   @HostListener('paste', ['$event'])
-  onPaste(event: ClipboardEvent) {
+  onPaste() {
     this.handleInputValue();
   }
 
-  private handleInputs(changes: SimpleChanges) {
-    const { allowNegative, maxIntegers, decimalNumberMask } = changes;
-    const { currentValue: maxDecimal = null } = decimalNumberMask || {};
-    const { currentValue: maxInt = 0 } = maxIntegers || {};
-    const { currentValue: allowNeg = false } = allowNegative || {};
-    const allowNegativeRegex = allowNeg === true ? '^[-]?' : '^';
-    this.decimalNumberStr = `${allowNegativeRegex}([1-9]\\d*|0)?(\\${this.decimalSeparator}\\d{0,2})?$`;
-    this.handleDecimalInput(maxDecimal);
-    this.handleIntegerInput(maxInt);
-  }
-
-  private handleIntegerInput(maxInt: number) {
-    maxInt = typeof maxInt === 'number' ? maxInt : this.maxIntegers;
+  private handleIntegerPart(maxInt: number) {
     const integerIndex = this.decimalNumberStr.indexOf('d*|');
     const valueValid =
       integerIndex > 0 && this.onlyNumberRegex.test(String(maxInt));
@@ -76,8 +68,7 @@ export class DecimalNumberMaskDirective implements OnChanges {
     this.decimalNumberRegex = new RegExp(this.decimalNumberStr);
   }
 
-  private handleDecimalInput(value: string) {
-    value = value || this.decimals.length.toString();
+  private handleDecimalPart(value: string) {
     const decimalIndex = this.decimalNumberStr.indexOf('d{0,');
     const valueValid = decimalIndex > 0 && this.onlyNumberRegex.test(value);
     if (valueValid) {
@@ -89,20 +80,23 @@ export class DecimalNumberMaskDirective implements OnChanges {
         'd{0,' + decimals,
         'd{0,' + value
       );
-      this.decimals = '000000000'.substring(0, +value);
+      this.decimals = '0000000000'.substring(0, +value);
     }
     this.decimalNumberRegex = new RegExp(this.decimalNumberStr);
   }
 
   private setControlValue() {
     if (this.decimals === '') return;
-    const value = this.elRef.nativeElement.value || '';
-    const valueMask = this.getControlValue(value);
-    this.control.setValue(valueMask, { emit: false });
+    const valueInput = this.inputElement.value || '';
+    const value = this.enableMask
+      ? this.getMaskedValue(valueInput)
+      : valueInput;
+    this.oldValue = value;
+    this.control.setValue(value, { emit: false });
   }
 
   private handleInputValue() {
-    const value = this.elRef.nativeElement.value || '';
+    const value = this.inputElement.value || '';
     if (!this.decimalNumberRegex.test(value)) {
       this.control.setValue(this.oldValue, { emit: false });
     } else {
@@ -110,7 +104,7 @@ export class DecimalNumberMaskDirective implements OnChanges {
     }
   }
 
-  private getControlValue = (value: string): string => {
+  private getMaskedValue = (value: string): string => {
     const values = value.trim().split(this.decimalSeparator);
     if (values.length > 1) {
       const integer =
@@ -134,5 +128,9 @@ export class DecimalNumberMaskDirective implements OnChanges {
 
   private get control(): AbstractControl {
     return this.ngControl.control;
+  }
+
+  private get inputElement(): HTMLInputElement {
+    return this.elRef.nativeElement as HTMLInputElement;
   }
 }

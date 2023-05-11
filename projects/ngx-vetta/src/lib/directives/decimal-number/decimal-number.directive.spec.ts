@@ -9,27 +9,26 @@ import {
   Validators,
 } from '@angular/forms';
 import TestUtils from '../../shared/utils/test.utils';
-import { DecimalNumberMaskDirective } from './decimal-number-mask.directive';
+import { DecimalNumberDirective } from './decimal-number.directive';
 
 @Component({
   template: `
-    <p data-testid="selection">1,123</p>
+    <p style="display: none;" data-testid="selection">1,123</p>
     <form [formGroup]="form">
       <input
         type="text"
         formControlName="test"
-        vetNumberMask
-        [allowNegative]="true"
+        vetDecimalNumber
         data-testid="input"
       />
     </form>
   `,
 })
 class HostComponent {
-  @ViewChild(DecimalNumberMaskDirective)
-  decimalNumberMaskDirective: DecimalNumberMaskDirective;
+  @ViewChild(DecimalNumberDirective)
+  decimalNumberMask: DecimalNumberDirective;
   form: FormGroup;
-  constructor() {}
+
   ngOnInit(): void {
     this.form = new FormGroup({
       test: new FormControl('', [Validators.required]),
@@ -47,7 +46,7 @@ describe('DecimalNumberMaskDirective', async () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DecimalNumberMaskDirective, HostComponent],
+      declarations: [DecimalNumberDirective, HostComponent],
       imports: [FormsModule, ReactiveFormsModule],
       providers: [
         { provide: ElementRef, useValue: mockElementRef },
@@ -73,6 +72,10 @@ describe('DecimalNumberMaskDirective', async () => {
   });
 
   it('should allow negative numbers', () => {
+    component.decimalNumberMask.decimalNumberOptions = {
+      enableMask: true,
+      allowNegative: true,
+    };
     TestUtils.setFieldElementValue(input, '-1');
     TestUtils.blur(fixture, 'input');
     fixture.detectChanges();
@@ -80,7 +83,10 @@ describe('DecimalNumberMaskDirective', async () => {
   });
 
   it('should not allow negative numbers', () => {
-    component.decimalNumberMaskDirective.allowNegative = false;
+    component.decimalNumberMask.decimalNumberOptions = {
+      enableMask: true,
+      allowNegative: true,
+    };
     TestUtils.setFieldElementValue(input, '-');
     TestUtils.blur(fixture, 'input');
     fixture.detectChanges();
