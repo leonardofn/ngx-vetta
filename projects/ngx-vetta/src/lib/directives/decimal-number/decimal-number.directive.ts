@@ -13,10 +13,11 @@ export class DecimalNumberDirective {
   private decimalNumberRegex = new RegExp(this.decimalNumberStr);
   private onlyNumberRegex = /^\d+$/;
 
-  private decimals = '00';
-  private decimalSeparator: DecimalSeparator = ',';
-  private oldValue = '';
+  private allowNegative: boolean;
   private enableMask: boolean;
+  private decimalSeparator: DecimalSeparator = ',';
+  private decimals = '00';
+  private oldValue = '';
 
   constructor(private elRef: ElementRef, private ngControl: NgControl) {}
 
@@ -33,9 +34,11 @@ export class DecimalNumberDirective {
     maxDecimals = maxDecimals > 0 ? maxDecimals : 2;
     maxIntegers = maxIntegers > 0 ? maxIntegers : 0;
     this.decimalSeparator = decimalSeparator;
+    this.enableMask = enableMask;
+    this.allowNegative = allowNegative;
     const regexStart = allowNegative ? '^[-]?' : '^';
     this.decimalNumberStr = `${regexStart}([1-9]\\d*|0)?(\\${this.decimalSeparator}\\d{0,${maxDecimals}})?$`;
-    this.enableMask = enableMask;
+
     this.handleDecimalPart(maxDecimals.toString());
     this.handleIntegerPart(maxIntegers);
   }
@@ -87,21 +90,26 @@ export class DecimalNumberDirective {
 
   private setControlValue() {
     if (this.decimals === '') return;
-    const valueInput = this.inputElement.value || '';
-    const value = this.enableMask
-      ? this.getMaskedValue(valueInput)
-      : valueInput;
-    this.oldValue = value;
-    this.control.setValue(value, { emit: false });
+    const originalValue = this.inputElement.value || '';
+    const displayValue = this.enableMask
+      ? this.getMaskedValue(originalValue)
+      : this.allowNegative && originalValue === '-'
+      ? ''
+      : originalValue;
+    this.inputElement.value = displayValue;
+    this.oldValue = displayValue;
+    this.setValue();
   }
 
   private handleInputValue() {
     const value = this.inputElement.value || '';
     if (!this.decimalNumberRegex.test(value)) {
-      this.control.setValue(this.oldValue, { emit: false });
+      this.inputElement.value = this.oldValue;
     } else {
+      this.inputElement.value = value;
       this.oldValue = value;
     }
+    this.setValue();
   }
 
   private getMaskedValue = (value: string): string => {
@@ -126,11 +134,24 @@ export class DecimalNumberDirective {
       : '';
   };
 
+  private setValue() {
+    this.control.setValue(this.rawValue, {
+      emit: false,
+      // emitModelToViewChange: quando verdadeiro ou não fornecido (o padrão),
+      // cada alteração aciona um evento onChange para atualizar a exibição.
+      emitModelToViewChange: false,
+    });
+  }
+
   private get control(): AbstractControl {
     return this.ngControl.control;
   }
 
   private get inputElement(): HTMLInputElement {
     return this.elRef.nativeElement as HTMLInputElement;
+  }
+
+  private get rawValue(): number | string {
+    return Number(this.oldValue.replace(/\,/g, '.')) || '';
   }
 }
