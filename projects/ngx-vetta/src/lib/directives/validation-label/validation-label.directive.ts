@@ -42,9 +42,10 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.divElement = null;
+    this.removeError();
     this.unsub$.next();
     this.unsub$.complete();
-    this.removeError();
   }
 
   @HostListener('blur', ['$event']) onBlurEvent() {
@@ -87,20 +88,17 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
     this.removeError();
     const errorMsg = this.getMessageValidation();
     this.divElement = this.createDivElement(errorMsg);
-    this.renderer2.appendChild(
-      this.elRef.nativeElement.parentElement,
-      this.divElement
-    );
-    this.renderer2.addClass(this.elRef.nativeElement, CssClass.REQUIRED);
-    this.renderer2.addClass(this.elRef.nativeElement, CssClass.IS_INVALID);
+    this.inputElement.after(this.divElement);
+    this.renderer2.addClass(this.inputElement, CssClass.REQUIRED);
+    this.renderer2.addClass(this.inputElement, CssClass.IS_INVALID);
   }
 
   private removeError() {
-    if (this.divElement) {
-      this.renderer2.removeClass(this.elRef.nativeElement, CssClass.REQUIRED);
-      this.renderer2.removeClass(this.elRef.nativeElement, CssClass.IS_INVALID);
+    if (this.isDivElement) {
+      this.renderer2.removeClass(this.inputElement, CssClass.REQUIRED);
+      this.renderer2.removeClass(this.inputElement, CssClass.IS_INVALID);
       this.renderer2.removeChild(
-        this.elRef.nativeElement.parentElement,
+        this.inputElement.parentElement,
         this.divElement
       );
       this.divElement = null;
@@ -129,6 +127,14 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
     return messages[firstErrorKey](valErrors[firstErrorKey]);
   };
 
+  private get control(): AbstractControl {
+    return this.ngControl.control;
+  }
+
+  private get inputElement(): HTMLInputElement {
+    return this.elRef.nativeElement as HTMLInputElement;
+  }
+
   private get elementId(): string {
     const idStr = Boolean(this.formControlName)
       ? this.formControlName
@@ -136,7 +142,10 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
     return idStr.toString() + 'Invalid';
   }
 
-  private get control(): AbstractControl {
-    return this.ngControl.control;
+  private get isDivElement(): boolean {
+    return (
+      typeof this.divElement === 'object' &&
+      this.divElement instanceof HTMLDivElement
+    );
   }
 }
