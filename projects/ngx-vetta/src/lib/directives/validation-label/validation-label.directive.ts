@@ -131,8 +131,8 @@ export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
     return this.ngControl.control;
   }
 
-  private get inputElement(): HTMLInputElement {
-    return this.elRef.nativeElement as HTMLInputElement;
+  private get inputElement(): HTMLInputElement | HTMLTextAreaElement {
+    return this.elRef.nativeElement;
   }
 
   private get elementId(): string {
