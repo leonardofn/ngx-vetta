@@ -6,4 +6,4 @@ import { DecimalNumberDirective } from './decimal-number.directive';
   imports: [],
   exports: [DecimalNumberDirective],
 })
-export class DecimalNumberMaskModule {}
+export class DecimalNumberModule {}
