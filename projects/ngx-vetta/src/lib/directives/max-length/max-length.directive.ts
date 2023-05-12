@@ -11,7 +11,7 @@ export class MaxLengthDirective {
 
   constructor(private elRef: ElementRef, private ngControl: NgControl) {}
 
-  @HostListener('window:keydown', ['$event'])
+  @HostListener('keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     const value = this.inputElement.value || '';
     const key = event.key.toUpperCase();
