@@ -98,7 +98,7 @@ export class DecimalNumberDirective {
       : originalValue;
     this.inputElement.value = displayValue;
     this.oldValue = displayValue;
-    this.setValue();
+    this.setRealValue();
   }
 
   private handleInputValue() {
@@ -109,34 +109,26 @@ export class DecimalNumberDirective {
       this.inputElement.value = value;
       this.oldValue = value;
     }
-    this.setValue();
+    this.setRealValue();
   }
 
   private getMaskedValue = (value: string): string => {
-    const values = value.trim().split(this.decimalSeparator);
-    if (values.length > 1) {
-      const integer =
-        values[0] === ''
-          ? `0${this.decimalSeparator}`
-          : values[0] + this.decimalSeparator;
+    const valueSplitted = value.trim().split(this.decimalSeparator);
+    let [integer, decimal] = valueSplitted;
 
-      const decimal = (values[1] + this.decimals).substring(
-        0,
-        this.decimals.length
-      );
-      return integer + decimal;
+    if (valueSplitted.length > 1) {
+      integer = ['', '-'].includes(integer) ? integer + '0' : integer;
+      decimal = (decimal + this.decimals).substring(0, this.decimals.length);
+      return integer + this.decimalSeparator + decimal;
     }
 
-    return values[0] !== ''
-      ? (values[0] === '-' ? '0' : values[0]) +
-          this.decimalSeparator +
-          this.decimals
+    return this.onlyNumberRegex.test(integer)
+      ? integer + this.decimalSeparator + this.decimals
       : '';
   };
 
-  private setValue() {
-    this.control.setValue(this.rawValue, {
-      emit: false,
+  private setRealValue() {
+    this.control.setValue(this.realValue, {
       // emitModelToViewChange: quando verdadeiro ou não fornecido (o padrão),
       // cada alteração aciona um evento onChange para atualizar a exibição.
       emitModelToViewChange: false,
@@ -151,7 +143,8 @@ export class DecimalNumberDirective {
     return this.elRef.nativeElement as HTMLInputElement;
   }
 
-  private get rawValue(): number | string {
-    return Number(this.oldValue.replace(/\,/g, '.')) || '';
+  private get realValue(): number | '' {
+    const value = this.oldValue.replace(/\,/, '.');
+    return isNaN(+value) ? '' : +value;
   }
 }
