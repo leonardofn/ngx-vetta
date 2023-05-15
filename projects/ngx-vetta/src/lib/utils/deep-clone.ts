@@ -1,3 +1,15 @@
+/**
+ * Utility functions for general use.
+ */
+
+/**
+ * @description
+ * Function that receives a valid value to be cloned.
+ *
+ * @returns
+ * A clone of the value received as a parameter.
+ *
+ */
 export function deepClone<T>(value: T): T {
   let clonedValue: any = null;
 
