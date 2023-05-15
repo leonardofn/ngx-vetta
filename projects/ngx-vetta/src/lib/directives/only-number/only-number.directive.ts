@@ -73,6 +73,6 @@ export class OnlyNumberDirective {
 
   private get realValue(): number | '' {
     const value = this.oldValue.replace(/\,/, '.');
-    return isNaN(+value) ? '' : +value;
+    return !value || isNaN(+value) ? '' : +value;
   }
 }
