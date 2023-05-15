@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { MaxLengthDirective } from './max-length.directive';
+import { VetMaxLengthDirective } from './max-length.directive';
 
 @NgModule({
-  declarations: [MaxLengthDirective],
+  declarations: [VetMaxLengthDirective],
   imports: [],
-  exports: [MaxLengthDirective],
+  exports: [VetMaxLengthDirective],
 })
-export class MaxLengthModule {}
+export class VetMaxLengthModule {}

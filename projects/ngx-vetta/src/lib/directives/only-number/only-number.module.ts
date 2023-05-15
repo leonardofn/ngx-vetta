@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { OnlyNumberDirective } from './only-number.directive';
+import { VetOnlyNumberDirective } from './only-number.directive';
 
 @NgModule({
-  declarations: [OnlyNumberDirective],
+  declarations: [VetOnlyNumberDirective],
   imports: [],
-  exports: [OnlyNumberDirective],
+  exports: [VetOnlyNumberDirective],
 })
-export class OnlyNumberModule {}
+export class VetOnlyNumberModule {}

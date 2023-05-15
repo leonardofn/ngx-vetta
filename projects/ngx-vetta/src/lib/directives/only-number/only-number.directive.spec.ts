@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import TestUtils from '../../shared/utils/test.utils';
-import { OnlyNumberDirective } from './only-number.directive';
+import { VetOnlyNumberDirective } from './only-number.directive';
 
 @Component({
   template: `
@@ -36,7 +36,7 @@ class HostComponent {
 
 class MockElementRef extends ElementRef {}
 
-describe('OnlyNumberDirective', () => {
+describe('VetOnlyNumberDirective', () => {
   let fixture: ComponentFixture<HostComponent>;
   let component: HostComponent;
   let input: HTMLInputElement;
@@ -44,7 +44,7 @@ describe('OnlyNumberDirective', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OnlyNumberDirective, HostComponent],
+      declarations: [VetOnlyNumberDirective, HostComponent],
       imports: [FormsModule, ReactiveFormsModule],
       providers: [
         { provide: ElementRef, useValue: mockElementRef },

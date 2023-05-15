@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import TestUtils from '../../shared/utils/test.utils';
-import { DecimalNumberDirective } from './decimal-number.directive';
+import { VetDecimalNumberDirective } from './decimal-number.directive';
 
 @Component({
   template: `
@@ -25,8 +25,8 @@ import { DecimalNumberDirective } from './decimal-number.directive';
   `,
 })
 class HostComponent {
-  @ViewChild(DecimalNumberDirective)
-  decimalNumberMask: DecimalNumberDirective;
+  @ViewChild(VetDecimalNumberDirective)
+  decimalNumberMask: VetDecimalNumberDirective;
   form: FormGroup;
 
   ngOnInit(): void {
@@ -38,7 +38,7 @@ class HostComponent {
 
 class MockElementRef extends ElementRef {}
 
-describe('DecimalNumberMaskDirective', async () => {
+describe('VetDecimalNumberDirective', async () => {
   let fixture: ComponentFixture<HostComponent>;
   let component: HostComponent;
   let input: HTMLInputElement;
@@ -46,7 +46,7 @@ describe('DecimalNumberMaskDirective', async () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DecimalNumberDirective, HostComponent],
+      declarations: [VetDecimalNumberDirective, HostComponent],
       imports: [FormsModule, ReactiveFormsModule],
       providers: [
         { provide: ElementRef, useValue: mockElementRef },

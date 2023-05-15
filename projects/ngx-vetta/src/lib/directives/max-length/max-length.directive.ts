@@ -4,7 +4,7 @@ import { NgControl } from '@angular/forms';
 @Directive({
   selector: 'input[vetMaxLength], textarea[vetMaxLength]',
 })
-export class MaxLengthDirective {
+export class VetMaxLengthDirective {
   private readonly onlyNumberRegex = /^\d+$/;
 
   @Input() vetMaxLength: number | string = '';

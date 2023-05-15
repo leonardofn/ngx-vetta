@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import TestUtils from '../../shared/utils/test.utils';
-import { MaxLengthDirective } from './max-length.directive';
+import { VetMaxLengthDirective } from './max-length.directive';
 
 @Component({
   template: `
@@ -36,7 +36,7 @@ class HostComponent {
 
 class MockElementRef extends ElementRef {}
 
-describe('MaxLengthDirective', () => {
+describe('VetMaxLengthDirective', () => {
   let fixture: ComponentFixture<HostComponent>;
   let component: HostComponent;
   let input: HTMLInputElement;
@@ -44,7 +44,7 @@ describe('MaxLengthDirective', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MaxLengthDirective, HostComponent],
+      declarations: [VetMaxLengthDirective, HostComponent],
       imports: [FormsModule, ReactiveFormsModule],
       providers: [
         { provide: ElementRef, useValue: mockElementRef },

@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import TestUtils from '../../shared/utils/test.utils';
-import { ValidationLabelDirective } from './validation-label.directive';
+import { VetValidationLabelDirective } from './validation-label.directive';
 
 @Component({
   template: `
@@ -35,7 +35,7 @@ class HostComponent {
 
 class MockElementRef extends ElementRef {}
 
-describe('ValidationLabelDirective', () => {
+describe('VetValidationLabelDirective', () => {
   let fixture: ComponentFixture<HostComponent>;
   let component: HostComponent;
   let input: HTMLInputElement;
@@ -50,7 +50,7 @@ describe('ValidationLabelDirective', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      declarations: [ValidationLabelDirective, HostComponent],
+      declarations: [VetValidationLabelDirective, HostComponent],
       imports: [FormsModule, ReactiveFormsModule],
       providers: [
         Renderer2,

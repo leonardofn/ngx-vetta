@@ -4,7 +4,7 @@ import { AbstractControl, NgControl } from '@angular/forms';
 @Directive({
   selector: 'input[vetOnlyNumber]',
 })
-export class OnlyNumberDirective {
+export class VetOnlyNumberDirective {
   private readonly regexNumber = /^\d*$/;
   private readonly regexNegativeNumber = /^[-]?\d*$/;
   private oldValue = '';

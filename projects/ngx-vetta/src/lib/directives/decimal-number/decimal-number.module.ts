@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { DecimalNumberDirective } from './decimal-number.directive';
+import { VetDecimalNumberDirective } from './decimal-number.directive';
 
 @NgModule({
-  declarations: [DecimalNumberDirective],
+  declarations: [VetDecimalNumberDirective],
   imports: [],
-  exports: [DecimalNumberDirective],
+  exports: [VetDecimalNumberDirective],
 })
-export class DecimalNumberModule {}
+export class VetDecimalNumberModule {}

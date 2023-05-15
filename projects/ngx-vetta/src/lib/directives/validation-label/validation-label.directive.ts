@@ -19,7 +19,9 @@ import ValidatorsUtils from '../../shared/utils/validators.utils';
   selector:
     'input[type=text][vetValidationLabel], textarea[vetValidationLabel]',
 })
-export class ValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
+export class VetValidationLabelDirective
+  implements OnInit, OnChanges, OnDestroy
+{
   private unsub$: Subject<void> = new Subject<void>();
   private divElement: HTMLDivElement | null = null;
 

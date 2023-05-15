@@ -6,7 +6,7 @@ import { DecimalSeparator } from '../../core/types/decimal-separator.type';
 @Directive({
   selector: 'input[type=text][vetDecimalNumber]',
 })
-export class DecimalNumberDirective {
+export class VetDecimalNumberDirective {
   // ^([1-9]\\d*|0)?(\\,\\d{0,2})?$ -> inteiros ilimitados
   // ^([1-9]\\d{0,2}|0)?(\\,\\d{0,2})?$ -> inteiros limitados
   private decimalNumberStr = '^([1-9]\\d*|0)?(\\,\\d{0,2})?$';

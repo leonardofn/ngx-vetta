@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { ValidationLabelDirective } from './validation-label.directive';
+import { VetValidationLabelDirective } from './validation-label.directive';
 
 @NgModule({
-  declarations: [ValidationLabelDirective],
+  declarations: [VetValidationLabelDirective],
   imports: [],
-  exports: [ValidationLabelDirective],
+  exports: [VetValidationLabelDirective],
 })
-export class ValidationLabelModule {}
+export class VetValidationLabelModule {}
