@@ -69,7 +69,10 @@ export class VetValidationLabelDirective implements OnInit, OnChanges, OnDestroy
 
   private handleWhiteSpaceValidator(noWhiteSpace: any) {
     if (noWhiteSpace && typeof noWhiteSpace === 'boolean') {
-      this.control.setValidators([this.control.validator, ValidatorsUtils.noWhiteSpace]);
+      this.control.setValidators([
+        this.control.validator,
+        ValidatorsUtils.noWhiteSpace()
+      ]);
     } else {
       const defaultErrors = this.control.validator;
       this.control.clearValidators();

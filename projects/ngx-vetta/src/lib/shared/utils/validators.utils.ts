@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export default class ValidatorsUtils {
   /**
@@ -13,9 +13,10 @@ export default class ValidatorsUtils {
    * if the validation check fails, otherwise `null`.
    *
    */
-  static get noWhiteSpace(): ValidatorFn {
-    return (control: AbstractControl) => {
+  static noWhiteSpace(): ValidatorFn {
+    const validatorFn: ValidatorFn = (control): ValidationErrors | null => {
       return (control.value || '').trim().length ? null : { whitespace: true };
     };
+    return validatorFn;
   }
 }
