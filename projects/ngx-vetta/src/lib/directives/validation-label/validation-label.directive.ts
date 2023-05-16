@@ -7,7 +7,7 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { AbstractControl, NgControl, ValidationErrors } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -16,17 +16,14 @@ import { CssClass } from '../../core/enums/css-class.enum';
 import ValidatorsUtils from '../../shared/utils/validators.utils';
 
 @Directive({
-  selector:
-    'input[type=text][vetValidationLabel], textarea[vetValidationLabel]',
+  selector: 'input[type=text][vetValidationLabel], textarea[vetValidationLabel]'
 })
-export class VetValidationLabelDirective
-  implements OnInit, OnChanges, OnDestroy
-{
+export class VetValidationLabelDirective implements OnInit, OnChanges, OnDestroy {
   private unsub$: Subject<void> = new Subject<void>();
   private divElement: HTMLDivElement | null = null;
 
-  @Input('formControlName') formControlName: string = '';
-  @Input('noWhiteSpace') noWhiteSpace: boolean = true;
+  @Input('formControlName') formControlName = '';
+  @Input('noWhiteSpace') noWhiteSpace = true;
 
   constructor(
     private renderer2: Renderer2,
@@ -61,23 +58,18 @@ export class VetValidationLabelDirective
   }
 
   private onStatusChanges() {
-    this.ngControl.statusChanges
-      .pipe(takeUntil(this.unsub$))
-      .subscribe((status) => {
-        if (status === 'INVALID' && this.ngControl.touched) {
-          this.showError();
-        } else {
-          this.removeError();
-        }
-      });
+    this.ngControl.statusChanges.pipe(takeUntil(this.unsub$)).subscribe(status => {
+      if (status === 'INVALID' && this.ngControl.touched) {
+        this.showError();
+      } else {
+        this.removeError();
+      }
+    });
   }
 
   private handleWhiteSpaceValidator(noWhiteSpace: any) {
     if (noWhiteSpace && typeof noWhiteSpace === 'boolean') {
-      this.control.setValidators([
-        this.control.validator,
-        ValidatorsUtils.noWhiteSpace,
-      ]);
+      this.control.setValidators([this.control.validator, ValidatorsUtils.noWhiteSpace]);
     } else {
       const defaultErrors = this.control.validator;
       this.control.clearValidators();
@@ -99,10 +91,7 @@ export class VetValidationLabelDirective
     if (this.isDivElement) {
       this.renderer2.removeClass(this.inputElement, CssClass.REQUIRED);
       this.renderer2.removeClass(this.inputElement, CssClass.IS_INVALID);
-      this.renderer2.removeChild(
-        this.inputElement.parentElement,
-        this.divElement
-      );
+      this.renderer2.removeChild(this.inputElement.parentElement, this.divElement);
       this.divElement = null;
     }
   }
@@ -121,8 +110,8 @@ export class VetValidationLabelDirective
       required: () => 'Campo obrigatório.',
       invalid: () => 'Campo inválido.',
       whitespace: () => 'Campo inválido.',
-      minlength: (e) => `Deve ter no mínimo ${e.requiredLength} caracteres.`,
-      maxlength: (e) => `Deve ter no máximo ${e.requiredLength} caracteres.`,
+      minlength: e => `Deve ter no mínimo ${e.requiredLength} caracteres.`,
+      maxlength: e => `Deve ter no máximo ${e.requiredLength} caracteres.`
     };
     const valErrors: ValidationErrors = this.ngControl.errors;
     const firstErrorKey = Object.keys(valErrors)[0];
@@ -146,8 +135,7 @@ export class VetValidationLabelDirective
 
   private get isDivElement(): boolean {
     return (
-      typeof this.divElement === 'object' &&
-      this.divElement instanceof HTMLDivElement
+      typeof this.divElement === 'object' && this.divElement instanceof HTMLDivElement
     );
   }
 }

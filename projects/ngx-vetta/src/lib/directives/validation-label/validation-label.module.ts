@@ -4,6 +4,6 @@ import { VetValidationLabelDirective } from './validation-label.directive';
 @NgModule({
   declarations: [VetValidationLabelDirective],
   imports: [],
-  exports: [VetValidationLabelDirective],
+  exports: [VetValidationLabelDirective]
 })
 export class VetValidationLabelModule {}

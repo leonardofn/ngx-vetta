@@ -36,9 +36,7 @@
               "projects/ngx-vetta/tsconfig.lib.json",
               "projects/ngx-vetta/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -67,9 +65,7 @@
               "projects/showcase/src/favicon.ico",
               "projects/showcase/src/assets"
             ],
-            "styles": [
-              "projects/showcase/src/styles.scss"
-            ],
+            "styles": ["projects/showcase/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -130,9 +126,7 @@
               "projects/showcase/src/favicon.ico",
               "projects/showcase/src/assets"
             ],
-            "styles": [
-              "projects/showcase/src/styles.scss"
-            ],
+            "styles": ["projects/showcase/src/styles.scss"],
             "scripts": []
           }
         },
@@ -144,9 +138,7 @@
               "projects/showcase/tsconfig.spec.json",
               "projects/showcase/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {

@@ -4,6 +4,6 @@ import { TestComponent } from './test.component';
 @NgModule({
   declarations: [TestComponent],
   imports: [],
-  exports: [TestComponent],
+  exports: [TestComponent]
 })
 export class NgxVettaModule {}

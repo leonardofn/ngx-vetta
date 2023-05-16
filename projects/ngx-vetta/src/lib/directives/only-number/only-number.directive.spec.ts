@@ -6,7 +6,7 @@ import {
   FormsModule,
   NgControl,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
 import TestUtils from '../../shared/utils/test.utils';
 import { VetOnlyNumberDirective } from './only-number.directive';
@@ -19,17 +19,16 @@ import { VetOnlyNumberDirective } from './only-number.directive';
         formControlName="test"
         vetOnlyNumber
         [allowNegative]="true"
-        data-testid="input"
-      />
+        data-testid="input" />
     </form>
-  `,
+  `
 })
 class HostComponent {
   form: FormGroup;
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      test: new FormControl('', [Validators.required]),
+      test: new FormControl('', [Validators.required])
     });
   }
 }
@@ -40,7 +39,7 @@ describe('VetOnlyNumberDirective', () => {
   let fixture: ComponentFixture<HostComponent>;
   let component: HostComponent;
   let input: HTMLInputElement;
-  let mockElementRef: MockElementRef = new MockElementRef(null);
+  const mockElementRef: MockElementRef = new MockElementRef(null);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,8 +47,8 @@ describe('VetOnlyNumberDirective', () => {
       imports: [FormsModule, ReactiveFormsModule],
       providers: [
         { provide: ElementRef, useValue: mockElementRef },
-        { provide: NgControl, useValue: NgControl },
-      ],
+        { provide: NgControl, useValue: NgControl }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HostComponent);

@@ -25,10 +25,7 @@ export default class TestUtils {
    * @param selector CSS selector
    *
    */
-  static queryByCss<T>(
-    fixture: ComponentFixture<T>,
-    selector: string
-  ): DebugElement {
+  static queryByCss<T>(fixture: ComponentFixture<T>, selector: string): DebugElement {
     // The return type of DebugElement#query() is declared as DebugElement,
     // but the actual return type is DebugElement | null.
     // See https://github.com/angular/angular/issues/22449.
@@ -77,13 +74,8 @@ export default class TestUtils {
    * @param fixture Component fixture
    * @param testId Test id set by `data-testid`
    */
-  static findEls<T>(
-    fixture: ComponentFixture<T>,
-    testId: string
-  ): DebugElement[] {
-    return fixture.debugElement.queryAll(
-      By.css(TestUtils.testIdSelector(testId))
-    );
+  static findEls<T>(fixture: ComponentFixture<T>, testId: string): DebugElement[] {
+    return fixture.debugElement.queryAll(By.css(TestUtils.testIdSelector(testId)));
   }
 
   /**
@@ -104,11 +96,7 @@ export default class TestUtils {
    * @param testId Test id set by `data-testid`
    * @param text Expected text
    */
-  static expectText<T>(
-    fixture: ComponentFixture<T>,
-    testId: string,
-    text: string
-  ): void {
+  static expectText<T>(fixture: ComponentFixture<T>, testId: string, text: string): void {
     expect(TestUtils.getText(fixture, testId)).toBe(text);
   }
 
@@ -119,10 +107,7 @@ export default class TestUtils {
    * @param fixture Component fixture
    * @param text Expected text
    */
-  static expectContainedText<T>(
-    fixture: ComponentFixture<T>,
-    text: string
-  ): void {
+  static expectContainedText<T>(fixture: ComponentFixture<T>, text: string): void {
     expect(fixture.nativeElement.textContent).toContain(text);
   }
 
@@ -144,11 +129,7 @@ export default class TestUtils {
    * @param type Event name, e.g. `input`
    * @param bubbles Whether the event bubbles up in the DOM tree
    */
-  static dispatchFakeEvent(
-    element: EventTarget,
-    type: string,
-    bubbles: boolean = false
-  ): void {
+  static dispatchFakeEvent(element: EventTarget, type: string, bubbles = false): void {
     const event = new Event(type, { bubbles, cancelable: false });
     element.dispatchEvent(event);
   }
@@ -222,10 +203,7 @@ export default class TestUtils {
    *
    * @param target Element that is the target of the click event
    */
-  static makeClickEvent(
-    type: string,
-    target: EventTarget
-  ): Partial<MouseEvent> {
+  static makeClickEvent(type: string, target: EventTarget): Partial<MouseEvent> {
     return {
       preventDefault(): void {},
       stopPropagation(): void {},
@@ -235,7 +213,7 @@ export default class TestUtils {
       currentTarget: target,
       bubbles: true,
       cancelable: true,
-      button: 0,
+      button: 0
     };
   }
 
@@ -254,7 +232,7 @@ export default class TestUtils {
       target,
       currentTarget: target,
       bubbles: true,
-      cancelable: true,
+      cancelable: true
     };
   }
 
@@ -268,7 +246,7 @@ export default class TestUtils {
     return new ClipboardEvent(type, {
       clipboardData: new DataTransfer(),
       bubbles: true,
-      cancelable: true,
+      cancelable: true
     });
   }
 
@@ -302,10 +280,7 @@ export default class TestUtils {
    * @param fixture Component fixture
    * @param testId Test id set by `data-testid`
    */
-  static async copy<T>(
-    fixture: ComponentFixture<T>,
-    testId: string
-  ): Promise<void> {
+  static async copy<T>(fixture: ComponentFixture<T>, testId: string): Promise<void> {
     const element = TestUtils.findEl(fixture, testId);
     const event = TestUtils.makeClipboardEvent('copy');
     await navigator.clipboard.writeText(element.nativeElement.textContent);
@@ -318,13 +293,10 @@ export default class TestUtils {
    * @param fixture Component fixture
    * @param testId Test id set by `data-testid`
    */
-  static async paste<T>(
-    fixture: ComponentFixture<T>,
-    testId: string
-  ): Promise<void> {
+  static async paste<T>(fixture: ComponentFixture<T>, testId: string): Promise<void> {
     const element = TestUtils.findEl(fixture, testId);
     const event = TestUtils.makeClipboardEvent('paste');
-    await navigator.clipboard.readText().then((clipText) => {
+    await navigator.clipboard.readText().then(clipText => {
       TestUtils.setFieldElementValue(element.nativeElement, clipText, true);
       element.triggerEventHandler('paste', event);
     });
@@ -339,10 +311,7 @@ export default class TestUtils {
    * @param fixture Fixture of the parent Component
    * @param selector Element selector, e.g. `app-example`
    */
-  static findComponent<T>(
-    fixture: ComponentFixture<T>,
-    selector: string
-  ): DebugElement {
+  static findComponent<T>(fixture: ComponentFixture<T>, selector: string): DebugElement {
     return TestUtils.queryByCss(fixture, selector);
   }
 

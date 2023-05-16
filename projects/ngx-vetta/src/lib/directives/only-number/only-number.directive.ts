@@ -2,14 +2,14 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { AbstractControl, NgControl } from '@angular/forms';
 
 @Directive({
-  selector: 'input[vetOnlyNumber]',
+  selector: 'input[vetOnlyNumber]'
 })
 export class VetOnlyNumberDirective {
   private readonly regexNumber = /^\d*$/;
   private readonly regexNegativeNumber = /^[-]?\d*$/;
   private oldValue = '';
 
-  @Input() allowNegative: boolean = false;
+  @Input() allowNegative = false;
 
   constructor(private elRef: ElementRef, private ngControl: NgControl) {}
 
@@ -55,7 +55,7 @@ export class VetOnlyNumberDirective {
     this.control.setValue(this.realValue, {
       // emitModelToViewChange: quando verdadeiro ou não fornecido (o padrão),
       // cada alteração aciona um evento onChange para atualizar a exibição.
-      emitModelToViewChange: false,
+      emitModelToViewChange: false
     });
   }
 

@@ -6,7 +6,7 @@ import {
   FormsModule,
   NgControl,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
 import TestUtils from '../../shared/utils/test.utils';
 import { VetValidationLabelDirective } from './validation-label.directive';
@@ -14,21 +14,16 @@ import { VetValidationLabelDirective } from './validation-label.directive';
 @Component({
   template: `
     <form [formGroup]="form">
-      <input
-        type="text"
-        formControlName="test"
-        vetValidationLabel
-        data-testid="input"
-      />
+      <input type="text" formControlName="test" vetValidationLabel data-testid="input" />
     </form>
-  `,
+  `
 })
 class HostComponent {
   form: FormGroup;
   constructor() {}
   ngOnInit(): void {
     this.form = new FormGroup({
-      test: new FormControl('', [Validators.required]),
+      test: new FormControl('', [Validators.required])
     });
   }
 }
@@ -39,14 +34,14 @@ describe('VetValidationLabelDirective', () => {
   let fixture: ComponentFixture<HostComponent>;
   let component: HostComponent;
   let input: HTMLInputElement;
-  let mockElementRef: MockElementRef = new MockElementRef(null);
   let mockNgControl: jasmine.SpyObj<NgControl>;
+  const mockElementRef: MockElementRef = new MockElementRef(null);
 
   beforeEach(async () => {
     mockNgControl = jasmine.createSpyObj<NgControl>('NgControl', [
       'statusChanges',
       'errors',
-      'touched',
+      'touched'
     ]);
 
     await TestBed.configureTestingModule({
@@ -55,8 +50,8 @@ describe('VetValidationLabelDirective', () => {
       providers: [
         Renderer2,
         { provide: ElementRef, useValue: mockElementRef },
-        { provide: NgControl, useValue: NgControl },
-      ],
+        { provide: NgControl, useValue: NgControl }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HostComponent);
@@ -74,14 +69,12 @@ describe('VetValidationLabelDirective', () => {
 
     TestUtils.blur(fixture, 'input');
     fixture.detectChanges();
-
     expect(input.classList).toContain('is-invalid');
 
     const elements = TestUtils.queryAllByCss(
       fixture,
       '.invalid-feedback'
-    ).map<HTMLDivElement>((el) => el.nativeElement);
-
+    ).map<HTMLDivElement>(el => el.nativeElement);
     expect(elements.length).toBe(1);
   });
 
@@ -90,14 +83,12 @@ describe('VetValidationLabelDirective', () => {
 
     TestUtils.blur(fixture, 'input');
     fixture.detectChanges();
-
     expect(input.classList).not.toContain('is-invalid');
 
     const elements = TestUtils.queryAllByCss(
       fixture,
       '.invalid-feedback'
-    ).map<HTMLDivElement>((el) => el.nativeElement);
-
+    ).map<HTMLDivElement>(el => el.nativeElement);
     expect(elements.length).toBe(0);
   });
 });

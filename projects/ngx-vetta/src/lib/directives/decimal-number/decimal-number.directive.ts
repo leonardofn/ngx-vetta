@@ -4,7 +4,7 @@ import { DecimalNumberOptions } from '../../core/models/decimal-number.model';
 import { DecimalSeparator } from '../../core/types/decimal-separator.type';
 
 @Directive({
-  selector: 'input[type=text][vetDecimalNumber]',
+  selector: 'input[type=text][vetDecimalNumber]'
 })
 export class VetDecimalNumberDirective {
   // ^([1-9]\\d*|0)?(\\,\\d{0,2})?$ -> inteiros ilimitados
@@ -28,7 +28,7 @@ export class VetDecimalNumberDirective {
       maxDecimals = 2,
       decimalSeparator = ',',
       allowNegative = false,
-      enableMask = false,
+      enableMask = false
     } = options || {};
 
     maxDecimals = maxDecimals > 0 ? maxDecimals : 2;
@@ -60,13 +60,9 @@ export class VetDecimalNumberDirective {
 
   private handleIntegerPart(maxInt: number) {
     const integerIndex = this.decimalNumberStr.indexOf('d*|');
-    const valueValid =
-      integerIndex > 0 && this.onlyNumberRegex.test(String(maxInt));
+    const valueValid = integerIndex > 0 && this.onlyNumberRegex.test(String(maxInt));
     if (maxInt > 0 && valueValid) {
-      this.decimalNumberStr = this.decimalNumberStr.replace(
-        'd*|',
-        `d{0,${maxInt - 1}}|`
-      );
+      this.decimalNumberStr = this.decimalNumberStr.replace('d*|', `d{0,${maxInt - 1}}|`);
     }
     this.decimalNumberRegex = new RegExp(this.decimalNumberStr);
   }
@@ -131,7 +127,7 @@ export class VetDecimalNumberDirective {
     this.control.setValue(this.realValue, {
       // emitModelToViewChange: quando verdadeiro ou não fornecido (o padrão),
       // cada alteração aciona um evento onChange para atualizar a exibição.
-      emitModelToViewChange: false,
+      emitModelToViewChange: false
     });
   }
 

@@ -2,5 +2,5 @@
 export enum CssClass {
   REQUIRED = 'required',
   IS_INVALID = 'is-invalid',
-  INVALID_FEEDBACK = 'invalid-feedback',
+  INVALID_FEEDBACK = 'invalid-feedback'
 }

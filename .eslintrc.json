@@ -1,0 +1,21 @@
+{
+  "parser": "@typescript-eslint/parser", // Especifica o analisador ESLint
+  "extends": ["prettier", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2020, // Permite a análise de recursos ECMAScript modernos
+    "sourceType": "module" // Permite o uso de importações
+  },
+  "rules": {
+    // Local para especificar regras ESLint.
+    // Pode ser usado para substituir regras especificadas nas configurações estendidas.
+    // Com o tempo e pesquisando você aprende a colocar regras aqui.
+    "prettier/prettier": [
+      "error",
+      {
+        "arrowParens": "avoid"
+      }
+    ],
+    "no-empty-function": "off",
+    "no-console": "warn"
+  }
+}

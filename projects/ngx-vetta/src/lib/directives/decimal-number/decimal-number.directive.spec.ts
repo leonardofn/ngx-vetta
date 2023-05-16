@@ -6,7 +6,7 @@ import {
   FormsModule,
   NgControl,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
 import TestUtils from '../../shared/utils/test.utils';
 import { VetDecimalNumberDirective } from './decimal-number.directive';
@@ -15,14 +15,9 @@ import { VetDecimalNumberDirective } from './decimal-number.directive';
   template: `
     <p style="display: none;" data-testid="selection">1,123</p>
     <form [formGroup]="form">
-      <input
-        type="text"
-        formControlName="test"
-        vetDecimalNumber
-        data-testid="input"
-      />
+      <input type="text" formControlName="test" vetDecimalNumber data-testid="input" />
     </form>
-  `,
+  `
 })
 class HostComponent {
   @ViewChild(VetDecimalNumberDirective)
@@ -31,7 +26,7 @@ class HostComponent {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      test: new FormControl('', [Validators.required]),
+      test: new FormControl('', [Validators.required])
     });
   }
 }
@@ -42,7 +37,7 @@ describe('VetDecimalNumberDirective', async () => {
   let fixture: ComponentFixture<HostComponent>;
   let component: HostComponent;
   let input: HTMLInputElement;
-  let mockElementRef: MockElementRef = new MockElementRef(null);
+  const mockElementRef: MockElementRef = new MockElementRef(null);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -50,8 +45,8 @@ describe('VetDecimalNumberDirective', async () => {
       imports: [FormsModule, ReactiveFormsModule],
       providers: [
         { provide: ElementRef, useValue: mockElementRef },
-        { provide: NgControl, useValue: NgControl },
-      ],
+        { provide: NgControl, useValue: NgControl }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HostComponent);
@@ -74,7 +69,7 @@ describe('VetDecimalNumberDirective', async () => {
   it('should allow negative numbers', () => {
     component.decimalNumberMask.decimalNumberOptions = {
       enableMask: true,
-      allowNegative: true,
+      allowNegative: true
     };
     TestUtils.setFieldElementValue(input, '-1');
     TestUtils.blur(fixture, 'input');
@@ -85,7 +80,7 @@ describe('VetDecimalNumberDirective', async () => {
   it('should not allow negative numbers', () => {
     component.decimalNumberMask.decimalNumberOptions = {
       enableMask: true,
-      allowNegative: true,
+      allowNegative: true
     };
     TestUtils.setFieldElementValue(input, '-');
     TestUtils.blur(fixture, 'input');

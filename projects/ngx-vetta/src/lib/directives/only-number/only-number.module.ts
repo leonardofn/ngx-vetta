@@ -4,6 +4,6 @@ import { VetOnlyNumberDirective } from './only-number.directive';
 @NgModule({
   declarations: [VetOnlyNumberDirective],
   imports: [],
-  exports: [VetOnlyNumberDirective],
+  exports: [VetOnlyNumberDirective]
 })
 export class VetOnlyNumberModule {}

@@ -2,7 +2,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: 'input[vetMaxLength], textarea[vetMaxLength]',
+  selector: 'input[vetMaxLength], textarea[vetMaxLength]'
 })
 export class VetMaxLengthDirective {
   private readonly onlyNumberRegex = /^\d+$/;
@@ -21,10 +21,7 @@ export class VetMaxLengthDirective {
 
     if (window.getSelection().toString().length > 0) return;
 
-    if (
-      !this.onlyNumberRegex.test(maxLength) ||
-      this.isKeysAllowed(key, event)
-    ) {
+    if (!this.onlyNumberRegex.test(maxLength) || this.isKeysAllowed(key, event)) {
       return;
     }
 
@@ -65,14 +62,11 @@ export class VetMaxLengthDirective {
       'HOME',
       'END',
       'ARROWLEFT',
-      'ARROWRIGHT',
+      'ARROWRIGHT'
     ].includes(key);
   };
 
-  private isModifierKeyCombination = (
-    key: string,
-    event: KeyboardEvent
-  ): boolean => {
+  private isModifierKeyCombination = (key: string, event: KeyboardEvent): boolean => {
     const { ctrlKey, metaKey } = event;
     return ['A', 'C', 'B', 'X'].includes(key) && (ctrlKey || metaKey);
   };
