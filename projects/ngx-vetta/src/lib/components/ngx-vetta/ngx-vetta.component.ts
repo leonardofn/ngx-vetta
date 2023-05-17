@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-ngx-vetta',
-  template: `<p>ngx-vetta works!</p>`,
+  selector: 'ngx-vetta',
+  template: `<p>Hello, World!</p>`,
   styles: []
 })
-export class TestComponent implements OnInit {
+export class NgxVettaComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}

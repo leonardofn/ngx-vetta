@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestComponent } from './test.component';
+import { NgxVettaComponent } from './ngx-vetta.component';
 
 describe('NgxVettaComponent', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
+  let component: NgxVettaComponent;
+  let fixture: ComponentFixture<NgxVettaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestComponent]
+      declarations: [NgxVettaComponent]
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TestComponent);
+    fixture = TestBed.createComponent(NgxVettaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
