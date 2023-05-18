@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgxVettaModule, ValidationLabelModule } from 'ngx-vetta';
+import {
+  NgxVettaModule,
+  VetDecimalNumberModule,
+  VetMaxLengthModule,
+  VetOnlyNumberModule,
+  VetValidationLabelModule
+} from 'ngx-vetta';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -11,9 +17,12 @@ import { AppComponent } from './app.component';
     FormsModule,
     ReactiveFormsModule,
     NgxVettaModule,
-    ValidationLabelModule,
+    VetValidationLabelModule,
+    VetDecimalNumberModule,
+    VetMaxLengthModule,
+    VetOnlyNumberModule
   ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
