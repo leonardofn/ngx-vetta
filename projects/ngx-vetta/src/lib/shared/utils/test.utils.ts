@@ -203,12 +203,12 @@ export default class TestUtils {
    *
    * @param target Element that is the target of the click event
    */
-  static makeClickEvent(type: string, target: EventTarget): Partial<MouseEvent> {
+  static makeClickEvent(target: EventTarget): Partial<MouseEvent> {
     return {
       preventDefault(): void {},
       stopPropagation(): void {},
       stopImmediatePropagation(): void {},
-      type,
+      type: 'click',
       target,
       currentTarget: target,
       bubbles: true,
@@ -223,12 +223,31 @@ export default class TestUtils {
    *
    * @param target Element that is the target of the focus event
    */
-  static makeBlurEvent(type: string, target: EventTarget): Partial<FocusEvent> {
+  static makeBlurEvent(target: EventTarget): Partial<FocusEvent> {
     return {
       preventDefault(): void {},
       stopPropagation(): void {},
       stopImmediatePropagation(): void {},
-      type,
+      type: 'blur',
+      target,
+      currentTarget: target,
+      bubbles: true,
+      cancelable: true
+    };
+  }
+
+  /**
+   * It creates a fake keypress event that provides the most important properties.
+   * The event can be passed to DebugElement#triggerEventHandler.
+   *
+   * @param target Element that is the target of the focus event
+   */
+  static makeKeydownEvent(target: EventTarget): Partial<KeyboardEvent> {
+    return {
+      preventDefault(): void {},
+      stopPropagation(): void {},
+      stopImmediatePropagation(): void {},
+      type: 'keydown',
       target,
       currentTarget: target,
       bubbles: true,
@@ -258,7 +277,7 @@ export default class TestUtils {
    */
   static click<T>(fixture: ComponentFixture<T>, testId: string): void {
     const element = TestUtils.findEl(fixture, testId);
-    const event = TestUtils.makeClickEvent('click', element.nativeElement);
+    const event = TestUtils.makeClickEvent(element.nativeElement);
     element.triggerEventHandler('click', event);
   }
 
@@ -270,8 +289,20 @@ export default class TestUtils {
    */
   static blur<T>(fixture: ComponentFixture<T>, testId: string): void {
     const element = TestUtils.findEl(fixture, testId);
-    const event = TestUtils.makeBlurEvent('blur', element.nativeElement);
+    const event = TestUtils.makeBlurEvent(element.nativeElement);
     element.triggerEventHandler('blur', event);
+  }
+
+  /**
+   * Emulates the pressing of a key with the `date-testid` attribute.
+   *
+   * @param fixture Component fixture
+   * @param testId Test id set by `data-testid`
+   */
+  static keydown<T>(fixture: ComponentFixture<T>, testId: string): void {
+    const element = TestUtils.findEl(fixture, testId);
+    const event = TestUtils.makeKeydownEvent(element.nativeElement);
+    element.triggerEventHandler('keydown', event);
   }
 
   /**

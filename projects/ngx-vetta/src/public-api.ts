@@ -11,6 +11,8 @@ export * from './lib/directives/max-length/max-length.directive';
 export * from './lib/directives/max-length/max-length.module';
 export * from './lib/directives/only-number/only-number.directive';
 export * from './lib/directives/only-number/only-number.module';
+export * from './lib/directives/uppercase/uppercase.directive';
+export * from './lib/directives/uppercase/uppercase.module';
 export * from './lib/directives/validation-label/validation-label.directive';
 export * from './lib/directives/validation-label/validation-label.module';
 export * from './lib/utils/deep-clone';
