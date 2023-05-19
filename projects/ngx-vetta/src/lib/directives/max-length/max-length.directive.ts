@@ -25,9 +25,7 @@ export class VetMaxLengthDirective {
       return;
     }
 
-    if (event.shiftKey || value.length > +maxLength - 1) {
-      event.preventDefault();
-    }
+    if (value.length > +maxLength - 1) event.preventDefault();
   }
 
   @HostListener('paste', ['$event'])
