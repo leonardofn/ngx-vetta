@@ -256,6 +256,25 @@ export default class TestUtils {
   }
 
   /**
+   * Creates a fake field change event that provides the most important properties.
+   * The event can be passed to DebugElement#triggerEventHandler.
+   *
+   * @param target Element that is the target of the focus event
+   */
+  static makeInputEvent(target: EventTarget): Partial<KeyboardEvent> {
+    return {
+      preventDefault(): void {},
+      stopPropagation(): void {},
+      stopImmediatePropagation(): void {},
+      type: 'input',
+      target,
+      currentTarget: target,
+      bubbles: true,
+      cancelable: true
+    };
+  }
+
+  /**
    * It creates a speech transfer area event that provides the most important properties.
    * The event can be passed to DebugElement#triggerEventHandler.
    *
@@ -294,12 +313,24 @@ export default class TestUtils {
   }
 
   /**
-   * Emulates the pressing of a key with the `date-testid` attribute.
+   * Emulates the pressing of a key on the element with the `date-testid` attribute.
    *
    * @param fixture Component fixture
    * @param testId Test id set by `data-testid`
    */
   static keydown<T>(fixture: ComponentFixture<T>, testId: string): void {
+    const element = TestUtils.findEl(fixture, testId);
+    const event = TestUtils.makeKeydownEvent(element.nativeElement);
+    element.triggerEventHandler('keydown', event);
+  }
+
+  /**
+   * Emulates the change in value of the element with the `date-testid` attribute.
+   *
+   * @param fixture Component fixture
+   * @param testId Test id set by `data-testid`
+   */
+  static input<T>(fixture: ComponentFixture<T>, testId: string): void {
     const element = TestUtils.findEl(fixture, testId);
     const event = TestUtils.makeKeydownEvent(element.nativeElement);
     element.triggerEventHandler('keydown', event);

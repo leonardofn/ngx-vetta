@@ -9,12 +9,13 @@ import { DecimalSeparator } from '../../core/types/decimal-separator.type';
 export class VetDecimalNumberDirective {
   // ^([1-9]\\d*|0)?(\\,\\d{0,2})?$ -> inteiros ilimitados
   // ^([1-9]\\d{0,2}|0)?(\\,\\d{0,2})?$ -> inteiros limitados
+  private readonly regexNumber = /^\d*$/;
+  private readonly regexNegativeNumber = /^[-]?\d*$/;
   private decimalNumberStr = '^([1-9]\\d*|0)?(\\,\\d{0,2})?$';
   private decimalNumberRegex = new RegExp(this.decimalNumberStr);
-  private onlyNumberRegex = /^\d+$/;
 
-  private allowNegative: boolean;
-  private enableMask: boolean;
+  private allowNegative = false;
+  private enableMask = false;
   private decimalSeparator: DecimalSeparator = ',';
   private decimals = '00';
   private oldValue = '';
@@ -60,7 +61,7 @@ export class VetDecimalNumberDirective {
 
   private handleIntegerPart(maxInt: number) {
     const integerIndex = this.decimalNumberStr.indexOf('d*|');
-    const valueValid = integerIndex > 0 && this.onlyNumberRegex.test(String(maxInt));
+    const valueValid = integerIndex > 0 && this.regexNumber.test(String(maxInt));
     if (maxInt > 0 && valueValid) {
       this.decimalNumberStr = this.decimalNumberStr.replace('d*|', `d{0,${maxInt - 1}}|`);
     }
@@ -69,7 +70,7 @@ export class VetDecimalNumberDirective {
 
   private handleDecimalPart(value: string) {
     const decimalIndex = this.decimalNumberStr.indexOf('d{0,');
-    const valueValid = decimalIndex > 0 && this.onlyNumberRegex.test(value);
+    const valueValid = decimalIndex > 0 && this.regexNumber.test(value);
     if (valueValid) {
       const decimals = this.decimalNumberStr.substring(
         decimalIndex + 4,
@@ -118,7 +119,7 @@ export class VetDecimalNumberDirective {
       return integer + this.decimalSeparator + decimal;
     }
 
-    return this.onlyNumberRegex.test(integer)
+    return this.regexInteger.test(integer)
       ? integer + this.decimalSeparator + this.decimals
       : '';
   };
@@ -129,6 +130,10 @@ export class VetDecimalNumberDirective {
       // cada alteração aciona um evento onChange para atualizar a exibição.
       emitModelToViewChange: false
     });
+  }
+
+  private get regexInteger(): RegExp {
+    return this.allowNegative ? this.regexNegativeNumber : this.regexNumber;
   }
 
   private get control(): AbstractControl {

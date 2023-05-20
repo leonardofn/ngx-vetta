@@ -80,11 +80,11 @@ describe('VetDecimalNumberDirective', async () => {
   it('should not allow negative numbers', () => {
     component.decimalNumberMask.decimalNumberOptions = {
       enableMask: true,
-      allowNegative: true
+      allowNegative: false
     };
     TestUtils.setFieldElementValue(input, '-');
-    TestUtils.blur(fixture, 'input');
+    TestUtils.input(fixture, 'input');
     fixture.detectChanges();
-    expect(input.value).toBe('0,00');
+    expect(input.value).toBe('');
   });
 });
