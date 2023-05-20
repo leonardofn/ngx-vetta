@@ -1,0 +1,30 @@
+<div class="form-box">
+  <h3>NgxVetta Demo</h3>
+  <ngx-vetta></ngx-vetta>
+  <div class="container">
+    <form [formGroup]="form">
+      <p>vetValidationLabel</p>
+      <input type="text" formControlName="vetValidationLabel" vetValidationLabel [noWhiteSpace]="true" />
+      <br />
+      <br />
+      <p>vetDecimalNumber</p>
+      <input type="text" formControlName="vetDecimalNumber" vetValidationLabel vetDecimalNumber
+        [decimalNumberOptions]="options" />
+      <br>
+      <br>
+      <p>vetMaxLength</p>
+      <input type="text" formControlName="vetMaxLength" vetMaxLength="5" />
+      <br>
+      <br>
+      <p>vetOnlyNumber</p>
+      <input type="text" formControlName="vetOnlyNumber" vetOnlyNumber [allowNegative]="true" />
+      <br>
+      <br>
+    </form>
+    <div>
+      <span>
+        <pre style="background-color: #f3f3f3;">{{ form.value | json }}</pre>
+      </span>
+    </div>
+  </div>
+</div>

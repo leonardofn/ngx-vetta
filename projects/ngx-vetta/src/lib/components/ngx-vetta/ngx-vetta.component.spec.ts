@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NgxVettaComponent } from './ngx-vetta.component';
 
 describe('NgxVettaComponent', () => {
@@ -8,9 +7,8 @@ describe('NgxVettaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NgxVettaComponent ]
-    })
-    .compileComponents();
+      declarations: [NgxVettaComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {
