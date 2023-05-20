@@ -119,7 +119,7 @@ export class VetDecimalNumberDirective {
       return integer + this.decimalSeparator + decimal;
     }
 
-    return this.regexInteger.test(integer)
+    return this.regexInteger.test(integer) && integer !== '-'
       ? integer + this.decimalSeparator + this.decimals
       : '';
   };
