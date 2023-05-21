@@ -6,7 +6,7 @@
     "start:app": "ng serve demo --open",
     "build:dev": "ng build ngx-vetta",
     "build:prod": "npm run clean && ng build ngx-vetta --configuration production && npm run copy:libdocs",
-    "publish:lib": "run build:prod && npm publish ./dist/ngx-vetta",
+    "publish:lib": "npm run build:prod && npm publish ./dist/ngx-vetta",
     "clean": "shx rm -rf dist/",
     "copy:libdocs": "cpx \"./{README.md,CONTRIBUTING.md,LICENSE}\" \"./dist/ngx-vetta\"",
     "lint": "eslint . --ext js,ts,json --quiet --fix",
