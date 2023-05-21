@@ -1,11 +1,11 @@
 # Ngx Vetta
 
-`Ngx Vetta` é uma bibloteca de componentes, diretivas e utilitários frequetemente usados nos projetos Angular desenvolvido pela [Vetta](https://www.linkedin.com/company/vettadigital/).
+`Ngx Vetta` é uma bibloteca de componentes, diretivas e utilitários frequetemente usados nos projetos Angular desenvolvidos pela [Vetta](https://www.linkedin.com/company/vettadigital/).
 
 ## Como instalar
 
 ```
-npm install ngx-vetta --save
+npm install --save ngx-vetta
 ```
 
 ## Guia rápido
@@ -32,6 +32,7 @@ import {
     VetOnlyNumberModule,
     VetDecimalNumberModule,
     VetMaxLengthModule,
+    VetUppercaseModule,
   ],
   (...)
 })
@@ -94,6 +95,8 @@ A diretiva aceita a passagem de um objeto de configuração do tipo `DecimalNumb
 | `allowNegative`    | `boolean` | Se `true`, permite a inserção de números negativos. O padrão é `false`.                                                                                 |
 | `enableMask`       | `boolean` | Se `true`, aplica máscara automaticamente no momento de perda de foco do campo (blur event). O padrão é `false`.                                        |
 
+#### Exemplo de uso
+
 ```ts
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -125,7 +128,7 @@ export class MyComponent {
   type="text"
   formControlName="myControl"
   vetDecimalNumber
-  [decimalNumberOptions]="options" />
+  decimalNumberOptions]="options" />
 ```
 
 ### Diretiva `vetOnlyNumber`
@@ -144,7 +147,7 @@ Para permitir o uso de números negativos, defina o atributo `allowNegative` com
 <input type="text" formControlName="myControl" vetOnlyNumber [allowNegative]="true" />
 ```
 
-## Diretiva `vetMaxLength`
+### Diretiva `vetMaxLength`
 
 A diretiva `vetMaxLength` define a quantidade máxima de caracteres permitidos para o controle especificado.
 
@@ -152,7 +155,7 @@ A diretiva `vetMaxLength` define a quantidade máxima de caracteres permitidos p
 <input type="text" formControlName="myControl" vetMaxLength="10" />
 ```
 
-## Diretiva `vetUppercase`
+### Diretiva `vetUppercase`
 
 A diretiva `vetUppercase` converte qualquer letra do alfabeto, acentuados ou não, para sua representação em maiúsculas.
 
