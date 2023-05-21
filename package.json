@@ -2,13 +2,13 @@
   "name": "ngx-vetta-workspace",
   "version": "0.0.0",
   "scripts": {
-    "start": "npm run clean && npm run build:prod && ng serve demo --open",
+    "start": "npm run build:prod && ng serve demo --open",
     "start:app": "ng serve demo --open",
     "build:dev": "ng build ngx-vetta",
     "build:prod": "npm run clean && ng build ngx-vetta --configuration production && npm run copy:libdocs",
-    "publish:lib": "npm publish ./dist/ngx-vetta",
+    "publish:lib": "run build:prod && npm publish ./dist/ngx-vetta",
     "clean": "shx rm -rf dist/",
-    "copy:libdocs": "cpx \"./{README.md,LICENSE}\" \"./dist/ngx-vetta\"",
+    "copy:libdocs": "cpx \"./{README.md,CONTRIBUTING.md,LICENSE}\" \"./dist/ngx-vetta\"",
     "lint": "eslint . --ext js,ts,json --quiet --fix",
     "test": "ng test ngx-vetta",
     "e2e": "ng e2e"

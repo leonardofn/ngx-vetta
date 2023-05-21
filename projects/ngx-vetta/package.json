@@ -1,7 +1,7 @@
 {
   "name": "ngx-vetta",
   "description": "Bibloteca de componentes, diretivas e utilitários frequetemente usados nos projetos Angular desenvolvidos pela Vetta.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Leonardo Feitosa",
     "email": "leonardofeitosa3010@gmail.com"
